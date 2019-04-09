@@ -56,23 +56,24 @@
 \titlebanner{banner above paper title}        % These are ignored unless
 \preprintfooter{short description of paper}   % 'preprint' option specified.
 
-\title{Title Text}
-\subtitle{Subtitle Text, if any}
+\title{CompCert with integer-pointer casting}
+\subtitle{}
 
-\authorinfo{TODO: name}
+\authorinfo{YongHyun Kim}
            {Seoul National University}
-           {TODO: email}
+           {yonghyun.kim@sf.snu.ac.kr}
 
 \maketitle
 
 \begin{abstract}
-This is the text of the abstract.
+The certified C compiler CompCert uses an abstract memory model which allows for many optimizations, but in which the behavior of integer-pointer casts is undefined. In [1], Kang et al. present a new formal memory model named "Quasi-concrete model" that supports integer-pointer casts semantics, while still allowing common optimizations. In this talk, I am going to introduce CompCert with Quasi-concrete model so-called "CompCert-Intptr". I will present several concepts: (1) Quasi-Concrete model (2) Mixed Simulation.
 \end{abstract}
 
-\section{Introduction}
+\section{Quasi-concrete model}
+At first, I will remind you about "Quasi-Concrete model" that introduced in [1]. It is a hybrid of Logical and Concrete Memory model. In this model, memory blocks can be either concrete like flat memroy model or logical. Logical block allows more optimizations. Concrete memory blocks support integer-pointer casts. To allow for as much optimizations as possible, memory blocks should be logical when allocated, and only be made concrete before an integer-pointer cast. This transformation is done with a new external function, the "capture" of a memory block.
 
-Hello, World!
-
+\section{Mixed Simulation}
+To prove the correctness of CompCert, we must prove that the behavior of the target program is one of the behaviors of the source program. To do so, we prove a backward simulation between CompCert C and ASM. To construct this simulation, CompCert used to prove forward simulations for each pass, then use determinism of the target language to build the backward simulation. However, with the new memory model, because the capture function is nondeterministic, such a proof cannot be used. But non-deterministic behavior can be precisely located to builtin functions and unknown external calls. We used this to adapt the forward simulations into mixed simulations. We present the definition of mixed simulations, show that we can prove mixed simulations for every CompCert pass. Then we design a new correctness proof exploiting those simulations.
 % We recommend abbrvnat bibliography style.
 
 \bibliographystyle{abbrvnat}
@@ -80,7 +81,7 @@ Hello, World!
 % The bibliography should be embedded for final submission.
 
 \bibliography{references}
-
+ [1] Jeehoon Kang, Chung-Kil Hur, William Mansky, Dmitri Garbuzov, Steve Zdancewic, and Viktor Vafeiadis. A formal C memory model supporting integer-pointer casts. In Proceedings of the 36th ACM SIGPLAN Conference on Programming Language Design and Implementation, Portland, OR, USA, June 15-17, 2015, pages 326335, 2015.
 \end{document}
 
 %                       Revision History
