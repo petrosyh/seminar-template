@@ -59,7 +59,7 @@
 \title{CompCert with integer-pointer casting}
 \subtitle{}
 
-\authorinfo{YongHyun Kim}
+\authorinfo{yonghyun Kim}
            {Seoul National University}
            {yonghyun.kim@sf.snu.ac.kr}
 
@@ -73,7 +73,9 @@ The certified C compiler CompCert uses an abstract memory model which allows for
 At first, I will remind you about "Quasi-Concrete model" that introduced in [1]. It is a hybrid of Logical and Concrete Memory model. In this model, memory blocks can be either concrete like flat memroy model or logical. Logical block allows more optimizations. Concrete memory blocks support integer-pointer casts. To allow for as much optimizations as possible, memory blocks should be logical when allocated, and only be made concrete before an integer-pointer cast. This transformation is done with a new external function, the "capture" of a memory block.
 
 \section{Mixed Simulation}
-To prove the correctness of CompCert, we must prove that the behavior of the target program is one of the behaviors of the source program. To do so, we prove a backward simulation between CompCert C and ASM. To construct this simulation, CompCert used to prove forward simulations for each pass, then use determinism of the target language to build the backward simulation. However, with the new memory model, because the capture function is nondeterministic, such a proof cannot be used. But non-deterministic behavior can be precisely located to builtin functions and unknown external calls. We used this to adapt the forward simulations into mixed simulations. We present the definition of mixed simulations, show that we can prove mixed simulations for every CompCert pass. Then we design a new correctness proof exploiting those simulations.
+CompCert's correctness proof proves that the behavior of the target program is one of the behaviors of the source program. 
+To do so, CompCert proves the backward simulation between the source program and the target program. 
+To construct this simulation, CompCert used to prove forward simulation for each pass. This kinds of proof technique exploit determinism of target program to build backward simulation. However, CompCert using the quasi-concrete model is no longer deterministic, because the capture function is non-deterministic. We can solve this problem by replacing forward simulation with mixed simulation. We present the definition of mixed simulations, show that we can prove mixed simulations for every CompCert pass. \\
 % We recommend abbrvnat bibliography style.
 
 \bibliographystyle{abbrvnat}
